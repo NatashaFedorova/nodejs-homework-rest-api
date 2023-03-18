@@ -13,7 +13,7 @@ const {
   addContact,
   deleteContact,
   updateContact,
-  updateValueFavoriteContact,
+  updateStatusContact,
 } = require('../controllers/contactsControllers');
 
 router.route('/').post(checkContactData, addContact).get(getContacts);
@@ -28,6 +28,6 @@ router
 
 router
   .route('/:contactId/favorite')
-  .patch(checkDataUponPatchReq, updateValueFavoriteContact);
+  .patch(checkDataUponPatchReq, updateStatusContact);
 
 module.exports = router;

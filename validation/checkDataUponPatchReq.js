@@ -5,7 +5,7 @@ const joiValidationPatchRequest = require('./joiValidationPatchRequest');
 const checkDataUponPatchReq = asyncWrapper(async (req, res, next) => {
   const { error, value } = await joiValidationPatchRequest(req.body);
 
-  if (error) return next(new AppError(400, error.details[0].message));
+  if (error) return next(new AppError(400, 'Missing field favorite'));
 
   req.body = value;
   next();
