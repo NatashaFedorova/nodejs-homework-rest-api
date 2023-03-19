@@ -1,9 +1,14 @@
 const asyncWrapper = require('../utils/asyncWrapper');
-const Contact = require('../models/useModel');
+const Contact = require('../models/Contact');
 
 const getContacts = asyncWrapper(async (req, res) => {
   const contacts = await Contact.find().sort({ name: 1 }).lean();
   res.status(200).json({ contacts });
+});
+
+const getFavoriteContacts = asyncWrapper(async (req, res) => {
+  const favoriteContacts = await Contact.find({ favorite: true });
+  res.status(200).json({ favoriteContacts });
 });
 
 const getContactById = asyncWrapper(async (req, res) => {
@@ -47,6 +52,7 @@ const updateStatusContact = asyncWrapper(async (req, res) => {
 module.exports = {
   getContacts,
   getContactById,
+  getFavoriteContacts,
   addContact,
   deleteContact,
   updateContact,

@@ -1,9 +1,11 @@
+const validateBody = require('./validateBody');
 const checkContactId = require('./checkContactId');
-const checkContactData = require('./checkContactData');
-const checkDataUponPatchReq = require('./checkDataUponPatchReq');
+const JoiSchemaForCreatingContact = require('./joiSchemaForCreatingContact');
+const JoiSchemaValidationPatchRequest = require('./joiSchemaValidationPatchRequest');
 
 module.exports = {
+  validateBody,
   checkContactId,
-  checkContactData,
-  checkDataUponPatchReq,
+  JoiSchemaForCreatingContact,
+  JoiSchemaValidationPatchRequest,
 };

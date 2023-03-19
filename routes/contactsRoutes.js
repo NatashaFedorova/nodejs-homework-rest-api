@@ -3,31 +3,41 @@ const router = express.Router();
 
 const {
   checkContactId,
-  checkContactData,
-  checkDataUponPatchReq,
+  validateBody,
+  JoiSchemaForCreatingContact,
+  JoiSchemaValidationPatchRequest,
 } = require('../validation');
 
 const {
   getContacts,
   getContactById,
+  getFavoriteContacts,
   addContact,
   deleteContact,
   updateContact,
   updateStatusContact,
 } = require('../controllers/contactsControllers');
 
-router.route('/').post(checkContactData, addContact).get(getContacts);
+router
+  .route('/')
+  .post(validateBody(JoiSchemaForCreatingContact), addContact)
+  .get(getContacts);
+
+router.route('/favorite').get(getFavoriteContacts);
 
 router.use('/:contactId', checkContactId);
 
 router
   .route('/:contactId')
   .get(getContactById)
-  .put(checkContactData, updateContact)
+  .put(validateBody(JoiSchemaForCreatingContact), updateContact)
   .delete(deleteContact);
 
 router
   .route('/:contactId/favorite')
-  .patch(checkDataUponPatchReq, updateStatusContact);
+  .patch(
+    validateBody(JoiSchemaValidationPatchRequest),
+    updateStatusContact
+  );
 
 module.exports = router;

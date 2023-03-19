@@ -1,7 +1,7 @@
 const {
   Types: { ObjectId },
 } = require('mongoose');
-const Contact = require('../models/useModel');
+const Contact = require('../models/Contact');
 const AppError = require('../utils/appError');
 const asyncWrapper = require('../utils/asyncWrapper');
 
