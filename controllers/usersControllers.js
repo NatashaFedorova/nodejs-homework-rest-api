@@ -17,10 +17,11 @@ const register = asyncWrapper(async (req, res, next) => {
     subscription: STARTER,
   });
 
-  const { email, subscription } = newUser;
+  const token = await signToken(newUser.id);
+  await User.findByIdAndUpdate(newUser.id, { token });
 
+  const { email, subscription } = newUser;
   newUser.password = undefined;
-  const token = signToken(newUser.id);
 
   res.status(201).json({
     token,
@@ -36,10 +37,12 @@ const login = asyncWrapper(async (req, res, next) => {
 
   const passwordMatched = await user.checkPassword(password, user.password);
   if (!passwordMatched) return next(new AppError(401, errorLogin));
-  user.password = undefined;
 
-  const token = signToken(user.id);
+  const token = await signToken(user.id);
+  await User.findByIdAndUpdate(user.id, { token });
+
   const { subscription } = user;
+  user.password = undefined;
 
   res.status(200).json({
     token,
@@ -47,12 +50,32 @@ const login = asyncWrapper(async (req, res, next) => {
   });
 });
 
+const getCurrentUser = asyncWrapper(async (req, res, next) => {
+  const { email, subscription } = req.user;
+  res.status(200).json({ email, subscription });
+});
+
 const logout = asyncWrapper(async (req, res, next) => {
-  res.json({ name: ' logout' });
+  const { id } = req.user;
+  await User.findByIdAndUpdate(id, { token: null });
+  res.status(204).json({ msg: 'No Content' });
+});
+
+const changeSubscription = asyncWrapper(async (req, res, next) => {
+  const { id } = req.user;
+  const { subscription } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    { subscription },
+    { new: true }
+  );
+  res.status(200).json({ user: updatedUser });
 });
 
 module.exports = {
   register,
   login,
+  getCurrentUser,
   logout,
+  changeSubscription,
 };

@@ -1,9 +1,28 @@
-const asyncWrapper = require('../utils/asyncWrapper');
 const Contact = require('../models/contact');
+const {
+  defaultLimit,
+  maxLimit,
+  defaultPage,
+} = require('../constants/valueReqQuery');
+const asyncWrapper = require('../utils/asyncWrapper');
 
 const getContacts = asyncWrapper(async (req, res) => {
-  const contacts = await Contact.find().sort({ name: 1 }).lean();
-  res.status(200).json({ contacts });
+  const { limit, page, favorite } = req.query;
+
+  const paginationLimit =
+    (+limit > maxLimit ? maxLimit : +limit) || defaultLimit;
+  const paginationPage = +page || defaultPage;
+  const paginationSkip = (paginationPage - 1) * paginationLimit;
+  const searchByFieldFavorite = favorite ? { favorite: true } : {};
+
+  const contacts = await Contact.find(searchByFieldFavorite)
+    .sort({ name: 1 })
+    .limit(paginationLimit)
+    .skip(paginationSkip)
+    .lean();
+  res
+    .status(200)
+    .json({ limit: paginationLimit, page: paginationPage, contacts });
 });
 
 const getFavoriteContacts = asyncWrapper(async (req, res) => {
