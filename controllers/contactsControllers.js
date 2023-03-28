@@ -1,5 +1,5 @@
 const asyncWrapper = require('../utils/asyncWrapper');
-const Contact = require('../models/Contact');
+const Contact = require('../models/contact');
 
 const getContacts = asyncWrapper(async (req, res) => {
   const contacts = await Contact.find().sort({ name: 1 }).lean();
@@ -18,7 +18,7 @@ const getContactById = asyncWrapper(async (req, res) => {
 });
 
 const addContact = asyncWrapper(async (req, res) => {
-  const newContact = await await Contact.create(req.body);
+  const newContact = await Contact.create(req.body);
   res.status(201).json({ newContact });
 });
 
@@ -30,11 +30,9 @@ const deleteContact = asyncWrapper(async (req, res) => {
 
 const updateContact = asyncWrapper(async (req, res) => {
   const { contactId } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
-    req.body,
-    { new: true }
-  );
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   res.status(200).json({ updatedContact });
 });
 

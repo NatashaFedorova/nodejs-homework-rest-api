@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const checkToken = require('../middleware/checkToken');
+
 const {
   checkContactId,
   validateBody,
@@ -17,6 +19,8 @@ const {
   updateContact,
   updateStatusContact,
 } = require('../controllers/contactsControllers');
+
+router.use('/', checkToken);
 
 router
   .route('/')
@@ -35,9 +39,6 @@ router
 
 router
   .route('/:contactId/favorite')
-  .patch(
-    validateBody(JoiSchemaValidationPatchRequest),
-    updateStatusContact
-  );
+  .patch(validateBody(JoiSchemaValidationPatchRequest), updateStatusContact);
 
 module.exports = router;

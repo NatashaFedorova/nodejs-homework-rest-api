@@ -17,12 +17,16 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Contact = model('Contacts', contactSchema);
+const Contact = model('Contact', contactSchema);
 
 module.exports = Contact;
