@@ -81,16 +81,15 @@ const changeSubscription = asyncWrapper(async (req, res) => {
 const userAvatarChange = asyncWrapper(async (req, res, next) => {
   const { user, file } = req;
   const { path: tempUpload, filename } = file;
+  const newPath = path.join(`public/avatars/${filename}`);
 
   await Jimp.read(tempUpload).then((img) =>
     img.resize(250, 250).write(tempUpload)
   );
 
-  const newPath = path.join('public', 'avatars', filename);
   await fs.rename(tempUpload, newPath);
 
   user.avatarURL = newPath;
-  console.log(newPath);
   await user.save();
 
   if (user.avatarURL !== newPath) {
