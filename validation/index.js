@@ -1,5 +1,6 @@
 const validateBody = require('./validateBody');
 const joiSchemaUser = require('./joiSchemaUser');
+const joiSchemaEmailResendVerifyEmail = require('./joiSchemaEmailResendVerifyEmail');
 const joiSchemaPatchUser = require('./joiSchemaPatchUser');
 const checkContactId = require('./checkContactId');
 const JoiSchemaForCreatingContact = require('./joiSchemaForCreatingContact');
@@ -10,6 +11,7 @@ module.exports = {
   joiSchemaUser,
   joiSchemaPatchUser,
   checkContactId,
+  joiSchemaEmailResendVerifyEmail,
   JoiSchemaForCreatingContact,
   JoiSchemaValidationPatchRequest,
 };

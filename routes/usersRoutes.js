@@ -8,6 +8,7 @@ const {
   validateBody,
   joiSchemaUser,
   joiSchemaPatchUser,
+  joiSchemaEmailResendVerifyEmail,
 } = require('../validation');
 
 const {
@@ -17,9 +18,17 @@ const {
   logout,
   changeSubscription,
   userAvatarChange,
+  verifyEmail,
+  resendVerifyEmail,
 } = require('../controllers/usersControllers');
 
 router.post('/register', validateBody(joiSchemaUser), register);
+router.get('/verify/:verificationToken', verifyEmail);
+router.post(
+  '/verify',
+  validateBody(joiSchemaEmailResendVerifyEmail),
+  resendVerifyEmail
+);
 router.post('/login', validateBody(joiSchemaUser), login);
 router.post('/logout', checkToken, logout);
 router.get('/current', checkToken, getCurrentUser);

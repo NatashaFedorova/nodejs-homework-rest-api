@@ -22,6 +22,8 @@ const checkToken = asyncWrapper(async (req, res, next) => {
 
   const findedUser = await User.findById(decodedToken.id, '-password');
   if (!findedUser) return next(new AppError(401, tokenError));
+
+  if (token && !findedUser.verify) return next(new AppError(401, tokenError));
   if (token !== findedUser.token) return next(new AppError(401, tokenError));
 
   req.user = findedUser;
